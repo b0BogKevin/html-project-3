@@ -24,7 +24,7 @@ html{
 
 }
 
-.new-student-button, .new-course-button{
+.new-student-button, .new-course-button, .edit-student-button, .update-student-button{
     width: 40px;
     height: 40px;
     font-size: 30px;
@@ -42,6 +42,24 @@ html{
     height: 24px;
     font-size: 15px;
     float: none;
+}
+.edit-student-button,.update-student-button{
+    width: 18px;
+    height: 18px;
+    font-size: 15px;
+    float: none;
+    float: right;
+    margin: 0;
+}
+.edit-student-button>img, .update-student-button>img{
+    width: 15px;
+    height: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+}
+.student{
+    width: fit-content;
 }
 h2{
     width: fit-content;
@@ -79,7 +97,7 @@ h2{
     width: 200px;
 }
 
-#new-student-input{
+#new-student-input, #update-student-input{
     background-color: rgb(0, 53, 0);
     border-radius: 3px;
     border: solid 1px rgb(25, 122, 0);
@@ -92,4 +110,14 @@ h2{
     text-decoration: line-through;
     color: red;
     cursor: pointer;
+}
+
+#students{
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    background-color: rgb(0, 53, 0);
+    position: fixed;
+    z-index: 10;
+    top: 0;
 }

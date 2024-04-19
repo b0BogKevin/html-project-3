@@ -6,7 +6,6 @@ fetch("https://vvri.pythonanywhere.com/api/courses",{
         "Access-Control-Allow-Origin": "*"
     }
     })
-   
         .then(response => response.json())
         .then(data => {
             let ki = ""
@@ -18,11 +17,15 @@ fetch("https://vvri.pythonanywhere.com/api/courses",{
                              <h2>${element.name}</h2>
                              `
                             for (let i = 0; i < element.students.length; i++) {
-                                ki+=`<div class="student" onclick="DeleteStudent(${element.id},${element.students[i].id})">${element.students[i].name}</div>`
+                                ki+=`<div class="edit-student-button" onclick="EditStudent(${element.id},${element.students[i].id})"><img src="images/pen.png" alt="" srcset=""></div>
+                                <div class="student" data-diakid="${element.students[i].id}" onclick="DeleteStudent(${element.students[i].id})">${element.students[i].name}</div>
+                                        `
+                                
+
                             }
                             ki+= `<button class="del-button" onclick="DeleteCourse(${element.id})"><img src="images/bin.webp" alt="" srcset=""></button>
                             <input type="text" id="new-student-input" class="new-student-input">
-                            <button class="new-student-button"  onclick=(NewStudent(${element.id}))>+</button>
+                            <button class="new-student-button"  onclick=(AssignStudent(${element.id}))>+</button>
                              </div>`
             })
         }
@@ -37,36 +40,6 @@ fetch("https://vvri.pythonanywhere.com/api/courses",{
 }
 Update()
 
-function DeleteStudent(courseId, studentId) {
-    var originalStudents = []
-    fetch(`https://vvri.pythonanywhere.com/api/courses/${courseId}`,{
-        method:"GET",
-        headers: {
-            "Content-type": "application/json; charset=UTF-8",
-            "Access-Control-Allow-Origin": "*"
-        }
-        })
-       
-            .then(response => response.json())
-            .then(data => {
-                originalStudents = data.students
-            })
-            .catch(error => console.log("Hiba történt: " + error))
-
-    fetch(`https://vvri.pythonanywhere.com/api/courses/${courseId}`, {
-     
-    method: "PATCH",
-
-    body: JSON.stringify({
-        students:originalStudents.splice(studentId,1)
-        
-    }),
-    headers: {
-        "Content-type": "application/json; charset=UTF-8"
-    }
-})
-Update()
-}
 
 function DeleteCourse(id) {
 fetch(`https://vvri.pythonanywhere.com/api/courses/${id}`, {
@@ -95,31 +68,64 @@ function NewCourse() {
 Update()
 }
 
-function NewStudent(course) {
-    let studentNameinputs = document.getElementsByClassName("new-student-input")
-    let newStudent = studentNameinputs[course-1].value
-
-let originalStudents = getOriginalStudentList(course)
-console.log(originalStudents)
+function DeleteStudent(id) {
+    fetch(`https://vvri.pythonanywhere.com/api/students/${id}`, {
+     
+method: "DELETE",
+headers: {
+    "Content-type": "application/json; charset=UTF-8"
+}
+})
+console.log("deleted")
+setTimeout(500,Update())
 }
 
-function getOriginalStudentList(course) {
-    
-    var originalStudents = []
-    fetch(`https://vvri.pythonanywhere.com/api/courses/${course}`,{
-        method:"GET",
-        headers: {
-            "Content-type": "application/json; charset=UTF-8",
-            "Access-Control-Allow-Origin": "*"
-        }
-        })
-            .then(response => response.json())
-            .then(data => {
-                originalStudents = data.students
+function AssignStudent(id){ 
+    let studentNameinputs = document.getElementsByClassName("new-student-input")
+    let newStudent = studentNameinputs[id-1].value
 
-                return originalStudents
-                
-            })
-            .catch(error => console.log("Hiba történt: " + error))
-         return originalStudents
+    fetch(`https://vvri.pythonanywhere.com/api/students`, {
+        method: "POST",
+          
+        body: JSON.stringify({
+            name : newStudent,
+            course_id : id,
+        }),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+     })
+     setTimeout(500,Update())  
+}
+
+
+function EditStudent(id,studentId) {
+    let students = document.getElementsByClassName("student")
+    let currentcourse = ""
+    for (const s of students) {
+        console.log(s)
+        currentcourse = s
+        if (s.dataset.diakid == studentId) {
+            break;
+        }
+    }
+console.log(currentcourse)
+    currentcourse.innerHTML = `<input type="text" id="update-student-input" class="new-student-input"> <button class="update-student-button" onclick="UpdateStudent(${id})"><img src="images/check.png" alt="" srcset=""></button>`
+currentcourse.removeAttribute("onclick");
+}
+function UpdateStudent(id) {
+    let studentNameinputs = document.getElementById("update-student-input")
+    let newStudent = studentNameinputs.value
+
+    fetch(`https://vvri.pythonanywhere.com/api/students/${id}`, {
+        method: "PATCH",
+          
+        body: JSON.stringify({
+            name : newStudent,
+        }),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+     })
+     setTimeout(500,Update())  
 }

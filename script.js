@@ -18,10 +18,7 @@ fetch("https://vvri.pythonanywhere.com/api/courses",{
                              `
                             for (let i = 0; i < element.students.length; i++) {
                                 ki+=`<div class="edit-student-button" onclick="EditStudent(${element.id},${element.students[i].id})"><img src="images/pen.png" alt="" srcset=""></div>
-                                <div class="student" data-diakid="${element.students[i].id}" onclick="DeleteStudent(${element.students[i].id})">${element.students[i].name}</div>
-                                        `
-                                
-
+                                <div class="student" data-diakid="${element.students[i].id}" onclick="DeleteStudent(${element.students[i].id})">${element.students[i].name}</div>`
                             }
                             ki+= `<button class="del-button" onclick="DeleteCourse(${element.id})"><img src="images/bin.webp" alt="" srcset=""></button>
                             <input type="text" id="new-student-input" class="new-student-input">
@@ -30,16 +27,14 @@ fetch("https://vvri.pythonanywhere.com/api/courses",{
             })
         }
         ki+=`<div class="course">
-                    <input type="text" id="new-course-input">  `
-
-                            ki+= `<button class="new-course-button" onclick="NewCourse()">+</button>
-                             </div>`
+                    <input type="text" id="new-course-input">
+                    <button class="new-course-button" onclick="NewCourse()">+</button>
+            </div>`
         document.getElementById("courses").innerHTML = ki
         })
         .catch(error => console.log("Hiba történt: " + error))
 }
 Update()
-
 
 function DeleteCourse(id) {
 fetch(`https://vvri.pythonanywhere.com/api/courses/${id}`, {
@@ -97,7 +92,6 @@ function AssignStudent(id){
      })
      setTimeout(500,Update())  
 }
-
 
 function EditStudent(id,studentId) {
     let students = document.getElementsByClassName("student")

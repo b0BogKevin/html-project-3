@@ -83,7 +83,7 @@ function AssignStudent(id) {
     else{
          newStudent = studentNameinputs[id - 1].value
     }
-    if (newStudent == "") {
+    if (/\s/g.test(newStudent)) {
         Update()
         return
     }
@@ -117,7 +117,7 @@ function EditStudent(id, studentId) {
 function UpdateStudent(id, courseId) {
     let studentNameinputs = document.getElementById("update-student-input")
     let newStudent = studentNameinputs.value
-    if (newStudent == "") {
+    if (/\s/g.test(newStudent)) {
         Update()
         return
     }

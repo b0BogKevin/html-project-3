@@ -1,7 +1,6 @@
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-
 function Update() {
     fetch("https://vvri.pythonanywhere.com/api/courses", {
         method: "GET",
@@ -33,8 +32,10 @@ function Update() {
                     <button class="new-course-button" onclick="NewCourse()">+</button>
             </div>`
             document.getElementById("courses").innerHTML = ki
+            
         })
         .catch(error => console.log("Hiba történt: " + error))
+
 }
 Update()
 
@@ -250,7 +251,7 @@ function OneStudent() {
             let ki = ""
             if (data) {
                 data.forEach(element => {
-                    if (element.name == null || element.name.includes(id) || !element.name=="null") {
+                    if (element.name == null || element.name.includes(id) || element.name=="null") {
                          ki += `<div class="course">
                         <div class="course-id">${element.id}</div>
                                  <h2>${element.name}</h2>

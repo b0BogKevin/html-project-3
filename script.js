@@ -52,6 +52,9 @@ function DeleteCourse(id) {
 
 function NewCourse() {
     coursename = document.getElementById("new-course-input").value
+    if (/\s/g.test(coursename) ||coursename=="") {
+        return
+    }
     fetch("https://vvri.pythonanywhere.com/api/courses", {
         method: "POST",
 

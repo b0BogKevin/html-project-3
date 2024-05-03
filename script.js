@@ -52,7 +52,7 @@ function DeleteCourse(id) {
 
 function NewCourse() {
     coursename = document.getElementById("new-course-input").value
-    if (/\s/g.test(coursename) ||coursename=="") {
+    if (coursename.trim()=="") {
         return
     }
     fetch("https://vvri.pythonanywhere.com/api/courses", {
@@ -87,7 +87,7 @@ function AssignStudent(id) {
     else{
          newStudent = studentNameinputs[id - 1].value
     }
-    if (/\s/g.test(newStudent) ||newStudent=="") {
+    if (newStudent.trim()=="") {
         Update()
         return
     }
@@ -121,7 +121,7 @@ function EditStudent(id, studentId) {
 function UpdateStudent(id, courseId) {
     let studentNameinputs = document.getElementById("update-student-input")
     let newStudent = studentNameinputs.value
-    if (/\s/g.test(newStudent) ||newStudent=="") {
+    if (newStudent.trim()=="") {
         Update()
         return
     }
@@ -187,7 +187,7 @@ function OneCourse() {
             let ki = ""
             if (data) {
                 data.forEach(element => {
-                    if (element.name == null || element.name.includes(id) || !element.name=="null") {
+                    if (element.name == null || element.name.toLowerCase().includes(id.toLowerCase()) || !element.name=="null") {
                         ki += ` <div class="course">
                             <div class="course-id">${element.id}</div>
                             <h2>${element.name}</h2>`
@@ -254,7 +254,7 @@ function OneStudent() {
             let ki = ""
             if (data) {
                 data.forEach(element => {
-                    if (element.name == null || element.name.includes(id) || element.name=="null") {
+                    if (element.name == null || element.name.toLowerCase().includes(id.toLowerCase()) || element.name=="null") {
                          ki += `<div class="course">
                         <div class="course-id">${element.id}</div>
                                  <h2>${element.name}</h2>

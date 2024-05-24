@@ -2,16 +2,8 @@ const url = "https://vvri.pythonanywhere.com/api/courses";
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-async function Update() {
-    try {
-        const response = await fetch(url, {
-            method: "GET",
-            headers: {
-            "Content-type": "application/json; charset=UTF-8",
-            }
-          })
-            const data = await response.json()
-            let ki = ""
+function updateHTML(data) {
+    let ki = ""
             if (data) {
                 data.forEach(element => {
                     ki += ` <div class="course">
@@ -31,27 +23,41 @@ async function Update() {
                         <input type="text" id="new-course-input">
                         <button class="new-course-button" onclick="NewCourse()">+</button>
                     </div>`
-            document.getElementById("courses").innerHTML = ki           
+            document.getElementById("courses").innerHTML = ki    
+}
+async function Update() {
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            }
+          })
+            const data = await response.json()
+            updateHTML(data)
         }
     catch (error) {
-        error => console.log("Hiba történt: " + error)
+        console.log("Hiba történt: " + error)
     }
 }
 Update()
 
 async function DeleteCourse(id) {
     try{
-    fetch(`https://vvri.pythonanywhere.com/api/courses/${id}`, {
+    const response = await(fetch(`https://vvri.pythonanywhere.com/api/courses/${id}`, {
         method: "DELETE",
         headers: {
             "Content-type": "application/json; charset=UTF-8"
         }
-    })
+    }))
+    const data = await response.json();
+    console.log(data);
+
     sleep(500).then(() => { Update(); });
     }
     catch(error)
     {
-        error => console.log("Hiba történt: " + error)
+        console.log("Hiba történt: " + error)
     }
 }
 
@@ -61,7 +67,7 @@ async function NewCourse() {
     if (coursename.trim()=="") {
         return
     }
-    fetch("https://vvri.pythonanywhere.com/api/courses", {
+    const response = await(fetch("https://vvri.pythonanywhere.com/api/courses", {
         method: "POST",
 
         body: JSON.stringify({
@@ -70,25 +76,31 @@ async function NewCourse() {
         headers: {
             "Content-type": "application/json; charset=UTF-8"
         }
-    })
+    }))
+    const data = await response.json();
+    updateHTML(data);
+
     sleep(500).then(() => { Update(); }); 
     } catch (error) {
-        error => console.log("Hiba történt: " + error)
+        console.log("Hiba történt: " + error)
     }
     
 }
 
 async function DeleteStudent(id) {
     try {
-        fetch(`https://vvri.pythonanywhere.com/api/students/${id}`, {
+        const response = await(fetch(`https://vvri.pythonanywhere.com/api/students/${id}`, {
         method: "DELETE",
         headers: {
             "Content-type": "application/json; charset=UTF-8"
         }
-    })
+    }))
+    const data = await response.json();
+    updateHTML(data);
+
     sleep(500).then(() => { Update(); });
     } catch (error) {
-        error => console.log("Hiba történt: " + error)
+        console.log("Hiba történt: " + error)
     }
     
 }
@@ -107,7 +119,7 @@ async function AssignStudent(id) {
         Update()
         return
     }
-    fetch(`https://vvri.pythonanywhere.com/api/students`, {
+    const response = await(fetch(`https://vvri.pythonanywhere.com/api/students`, {
         method: "POST",
 
         body: JSON.stringify({
@@ -117,10 +129,12 @@ async function AssignStudent(id) {
         headers: {
             "Content-type": "application/json; charset=UTF-8"
         }
-    })
+    }))
+    const data = await response.json();
+    updateHTML(data);
     sleep(500).then(() => { Update(); });
     } catch (error) {
-        error => console.log("Hiba történt: " + error)
+        console.log("Hiba történt: " + error)
     }
     
 }
@@ -146,7 +160,7 @@ async function UpdateStudent(id, courseId) {
         return
     }
     try {
-        fetch(`https://vvri.pythonanywhere.com/api/students/${id}`, {
+        const response = await(fetch(`https://vvri.pythonanywhere.com/api/students/${id}`, {
         method: "PUT",
 
         body: JSON.stringify({
@@ -156,10 +170,12 @@ async function UpdateStudent(id, courseId) {
         headers: {
             "Content-type": "application/json; charset=UTF-8"
         }
-    })
+    }))
+    const data = await response.json();
+    updateHTML(data);
     sleep(500).then(() => { Update(); });
     } catch (error) {
-        error => console.log("Hiba történt: " + error)
+        console.log("Hiba történt: " + error)
     }
     
 }
@@ -204,9 +220,9 @@ try {
            "Access-Control-Allow-Origin": "*"
         }
    })
-       const data = await response.json()
-           let ki = ""
-           if (data) {
+            const data = await response.json()
+            let ki = ""
+            if (data) {
                data.forEach(element => {
                    if (element.name == null || element.name.toLowerCase().includes(id.toLowerCase()) || !element.name=="null") {
                        ki += ` <div class="course">
@@ -230,7 +246,7 @@ try {
            document.getElementById("courses").innerHTML = ki
    } 
 } catch (error) {
-    error => console.log("Hiba történt: " + error)
+    console.log("Hiba történt: " + error)
 }
 }
 
@@ -279,13 +295,12 @@ async function OneStudent() {
                                  <button class="del-button" onclick="DeleteStudent(${element.id})"><img src="images/bin.webp" alt="" srcset=""></button>
                                  </div>`
                     }
-               
                 })
             }
             document.getElementById("courses").innerHTML = ki
     }  
     } catch (error) {
-    error => console.log("Hiba történt: " + error)
+    console.log("Hiba történt: " + error)
     }
 }
 async function ShowAllStudnts() {
@@ -310,6 +325,6 @@ async function ShowAllStudnts() {
             }
             document.getElementById("courses").innerHTML = ki
     } catch (error) {
-    error => console.log("Hiba történt: " + error) 
+    console.log("Hiba történt: " + error) 
     } 
 }
